@@ -16,7 +16,7 @@ while ($true) {
                     "Radio Type"= $($NetSH -match "Type de radio" -split(": "))[1]  
         }
         $InfoNetSh
-        Start-Sleep -s 0.5
+        Start-Sleep 1
     } else {
         Write-Output "Impossible de se connecter a l'AP."
         break
