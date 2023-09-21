@@ -10,10 +10,10 @@ while ($true) {
     if($NetSH) {
        $InfoNetSh = [PSCustomObject] @{
                     "Timestamp"= Get-Date -Format "yyyyMMdd HH:mm:ss"
-                    "BSSID"= $NetSH -match "^\s+BSSID" -Replace "^\s+BSSID\s+:\s+",""
-                    "Signal"= $NetSH -match "^\s+Signal" -Replace "^\s+Signal\s+:\s+",""
-                    "Canal"= $NetSH -match "^\s+Canal" -Replace "^\s+Canal\s+:\s+",""
-                    "Radio Type"= $NetSH -match "^\s+Type de radio" -Replace "^\s+Type de radio\s+:\s+",""  
+                    "BSSID"= $($NetSH -match "^\s+BSSID" -split(": "))[1]
+                    "Signal"= $($NetSH -match "^\s+Signal" -split(": "))[1]
+                    "Canal"= $($NetSH -match "^\s+Canal" -split(": "))[1]
+                    "Radio Type"= $($NetSH -match "^\s+Type de radio" -split(": "))[1]  
         }
         $InfoNetSh
         Start-Sleep -s 0.5
