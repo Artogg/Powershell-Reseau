@@ -12,7 +12,7 @@ while ($true) {
                     "Timestamp"= Get-Date -Format "ddMMyyyy HH:mm:ss"
                     "BSSID"= $($NetSH -match "BSSID" -split(": "))[1]
                     "Signal"= $($NetSH -match "Signal" -split(": "))[1]
-                    "Canal"= $($NetSH -match "^Canal" -split(": "))[1]
+                    "Canal"= $($NetSH -match "Canal" -split(": "))[1]
                     "Radio Type"= $($NetSH -match "Type de radio" -split(": "))[1]  
         }
         $InfoNetSh
