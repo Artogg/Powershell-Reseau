@@ -1,0 +1,24 @@
+<# 
+.DESCRIPTION
+Script pour recuperer les differentes informations sur la connexion a une borne (puissance, signal, canal...).
+Se balader entre deux bornes pour voir le changement d appairement.
+#>
+
+# La commande netsh ne renvoie pas d'objet, seuleument une suite de string, ce qui oblige a faire des grep
+while ($true) {
+    $NetSH = netsh wlan sh int
+    if($NetSH) {
+       $InfoNetSh = [PSCustomObject] @{
+                    "Timestamp"= Get-Date -Format "yyyyMMdd HH:mm:ss"
+                    "BSSID"= $NetSH -match "^\s+BSSID" -Replace "^\s+BSSID\s+:\s+",""
+                    "Signal"= $NetSH -match "^\s+Signal" -Replace "^\s+Signal\s+:\s+",""
+                    "Canal"= $NetSH -match "^\s+Canal" -Replace "^\s+Canal\s+:\s+",""
+                    "Radio Type"= $NetSH -match "^\s+Type de radio" -Replace "^\s+Type de radio\s+:\s+",""  
+        }
+        $InfoNetSh
+        Start-Sleep -s 0.5
+    } else {
+        Write-Output "Impossible de se connecter a l'AP."
+        break
+    }
+}
