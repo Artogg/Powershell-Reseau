@@ -1,21 +1,14 @@
-<# 
-.DESCRIPTION
-Script pour recuperer les differentes informations sur la connexion a une borne (puissance, signal, canal...).
-Se balader entre deux bornes pour voir le changement d appairement.
-#>
-
-# La commande netsh ne renvoie pas d'objet, seuleument une suite de string, ce qui oblige a faire des grep
-
-# On force l'UTF-8
 $OutputEncoding = [System.Console]::OutputEncoding = [System.Console]::InputEncoding = [System.Text.Encoding]::UTF8
 $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
+function get-IntWifi{
+    $intWifi = Get-NetIPConfiguration | Where-object -property InterfaceAlias -Match "Wi-Fi" 
+    return $intwifi
+} 
 
-# Jusqu'à l'arrêt manuel, on boucle sur le résultat de la commande netsh
-while ($true) {
-    $NetSH = netsh wlan sh int
-    if($NetSH) {
-       $InfoNetSh = [PSCustomObject] @{
+function get-netsh{
+    $NetSh = netsh wlan sh int
+    $InfoNetSh = [PSCustomObject] @{
                     "Timestamp"= Get-Date -Format "dd/MM/yyyy HH:mm:ss"
                     "SSID" = $($NetSH -match "SSID" -split(": "))[1]
                     "BSSID"= $($NetSH -match "BSSID" -split(": "))[1]
@@ -27,10 +20,25 @@ while ($true) {
                     "Authentification" = $($NetSH -match "Authentification" -split(": "))[1]
                     "Chiffrement" = $($NetSH -match "Chiffrement" -split(": "))[1]
         }
-        $InfoNetSh
-        Start-Sleep 1
-    } else {
-        Write-Output "Impossible de se connecter a l'AP."
-        break
+        return $InfoNetSh | Format-list -Property *
+}
+
+function get-RealTimeNetsh{
+    while($true){
+        if (get-IntWifi){
+            if(get-netsh){
+                get-IntWifi
+                get-netsh
+            } else {
+                write-output "AP injoignable."
+                break
+            }
+        } else {
+            write-output "Interface Réseau sans fil non détectée"
+            break
+        }
     }
 }
+
+get-RealTimeNetsh
+
