@@ -9,7 +9,7 @@ while ($true) {
     $NetSH = netsh wlan sh int
     if($NetSH) {
        $InfoNetSh = [PSCustomObject] @{
-                    "Timestamp"= Get-Date -Format "ddMMyyyy HH:mm:ss"
+                    "Timestamp"= Get-Date -Format "dd/MM/yyyy HH:mm:ss"
                     "BSSID"= $($NetSH -match "BSSID" -split(": "))[1]
                     "Signal"= $($NetSH -match "Signal" -split(": "))[1]
                     "Canal"= $($NetSH -match "Canal" -split(": "))[1]
