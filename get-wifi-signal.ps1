@@ -24,21 +24,22 @@ function get-netsh{
 }
 
 function get-RealTimeNetsh{
-    while($true){
-        if (get-IntWifi){
+    if (get-IntWifi){
+        get-IntWifi
+        while($true){
             if(get-netsh){
-                get-IntWifi
                 get-netsh
+                Start-sleep 2
             } else {
                 write-output "AP injoignable."
                 break
             }
-        } else {
-            write-output "Interface Réseau sans fil non détectée"
-            break
         }
+    } else {
+        write-output "Interface Réseau sans fil non détectée"
     }
 }
+
 
 get-RealTimeNetsh
 
