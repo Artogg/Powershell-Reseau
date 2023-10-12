@@ -13,6 +13,7 @@ function get-IntWifi{
 function get-netsh{
     $NetSh = netsh wlan sh int
     $InfoNetSh = [PSCustomObject] @{
+                    "Adresse MAC carte Wifi du poste" = $($NetSH -match "Adresse physique" -split(": "))[1]
                     "SSID" = $($NetSH -match "SSID" -split(": "))[1]
                     "BSSID"= $($NetSH -match "BSSID" -split(": "))[1]
                     "Signal"= $($NetSH -match "Signal" -split(": "))[1]
