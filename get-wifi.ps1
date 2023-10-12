@@ -1,6 +1,10 @@
 $OutputEncoding = [System.Console]::OutputEncoding = [System.Console]::InputEncoding = [System.Text.Encoding]::UTF8
 $PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
+function get-timestamp{
+    return get-date -Format "dd/MM/yyyy HH:mm:ss"
+}
+
 function get-IntWifi{
     $intWifi = Get-NetIPConfiguration | Where-object -property InterfaceAlias -Match "Wi-Fi" 
     return $intwifi
@@ -9,7 +13,6 @@ function get-IntWifi{
 function get-netsh{
     $NetSh = netsh wlan sh int
     $InfoNetSh = [PSCustomObject] @{
-                    "Timestamp"= Get-Date -Format "dd/MM/yyyy HH:mm:ss"
                     "SSID" = $($NetSH -match "SSID" -split(": "))[1]
                     "BSSID"= $($NetSH -match "BSSID" -split(": "))[1]
                     "Signal"= $($NetSH -match "Signal" -split(": "))[1]
